@@ -27,6 +27,7 @@ import android.text.Selection;
 import android.text.SpannableStringBuilder;
 import android.text.method.TextKeyListener;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -539,21 +540,25 @@ public class AllAppsContainerView extends BaseContainerView implements DragSourc
 
     @Override
     public void onLauncherTransitionPrepare(Launcher l, boolean animated, boolean toWorkspace) {
+        Log.d("AllAppsContainerView","onLauncherTransitionPrepare");
         // Do nothing
     }
 
     @Override
     public void onLauncherTransitionStart(Launcher l, boolean animated, boolean toWorkspace) {
         // Do nothing
+        Log.d("AllAppsContainerView","onLauncherTransitionStart");
     }
 
     @Override
     public void onLauncherTransitionStep(Launcher l, float t) {
         // Do nothing
+        Log.d("AllAppsContainerView","onLauncherTransitionStep");
     }
 
     @Override
     public void onLauncherTransitionEnd(Launcher l, boolean animated, boolean toWorkspace) {
+        Log.d("AllAppsContainerView","onLauncherTransitionEnd");
         if (toWorkspace) {
             // Reset the search bar and base recycler view after transitioning home
             mSearchBarController.reset();

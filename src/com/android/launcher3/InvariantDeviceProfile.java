@@ -94,6 +94,10 @@ public class InvariantDeviceProfile {
                 p.defaultLayoutId);
     }
 
+
+   /* new InvariantDeviceProfile("Nexus 4",
+          335, 567,     4, 4, 4, 4, 4, DEFAULT_ICON_SIZE_DP, 13, 5, 56, R.xml.default_workspace_4x4)
+*/
     InvariantDeviceProfile(String n, float w, float h, int r, int c, int fr, int fc, int maapc,
             float is, float its, float hs, float his, int dlId) {
         // Ensure that we have an odd number of hotseat items (since we need to place all apps)
