@@ -19,6 +19,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -52,7 +53,7 @@ public class AllAppsRecyclerViewContainerView extends FrameLayout
         Launcher launcher = (Launcher) context;
         DeviceProfile grid = launcher.getDeviceProfile();
 
-        mTouchFeedbackView = new ClickShadowView(context);
+       mTouchFeedbackView = new ClickShadowView(context);
 
         // Make the feedback view large enough to hold the blur bitmap.
         int size = grid.allAppsIconSizePx + mTouchFeedbackView.getExtraSize();
@@ -61,12 +62,16 @@ public class AllAppsRecyclerViewContainerView extends FrameLayout
 
     @Override
     public void setPressedIcon(BubbleTextView icon, Bitmap background) {
-        if (icon == null || background == null) {
+
+        Log.d("rongqingyu", "setPressedIcon");
+        new Throwable().printStackTrace();
+         if (icon == null || background == null) {
             mTouchFeedbackView.setBitmap(null);
             mTouchFeedbackView.animate().cancel();
         } else if (mTouchFeedbackView.setBitmap(background)) {
             mTouchFeedbackView.alignWithIconView(icon, (ViewGroup) icon.getParent());
             mTouchFeedbackView.animateShadow();
         }
+
     }
 }

@@ -203,6 +203,9 @@ public class LauncherStateTransitionAnimation {
             final Workspace.State toWorkspaceState, final View buttonView, final View toView,
             final View contentView, final View revealView, final View overlaySearchBarView,
             final boolean animated, final PrivateTransitionCallbacks pCb) {
+
+
+        Log.d("startAnimation","ToOverlay");
         final AnimatorSet animation = LauncherAnimUtils.createAnimatorSet();
         final Resources res = mLauncher.getResources();
         final boolean material = Utilities.ATLEAST_LOLLIPOP;
@@ -483,6 +486,7 @@ public class LauncherStateTransitionAnimation {
             final View fromView, final View contentView, final View revealView,
             final View overlaySearchBarView, final boolean animated, final Runnable onCompleteRunnable,
             final PrivateTransitionCallbacks pCb) {
+        Log.d("startAnimation","ToWorkspaceFromOverlay");
         final AnimatorSet animation = LauncherAnimUtils.createAnimatorSet();
         final Resources res = mLauncher.getResources();
         final boolean material = Utilities.ATLEAST_LOLLIPOP;

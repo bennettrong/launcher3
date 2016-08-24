@@ -18,6 +18,8 @@ package com.android.launcher3.util;
 
 import android.content.ComponentName;
 import android.content.Context;
+import android.util.Log;
+
 import com.android.launcher3.compat.UserHandleCompat;
 import com.android.launcher3.compat.UserManagerCompat;
 
@@ -35,7 +37,10 @@ public class ComponentKey {
         assert (user != null);
         this.componentName = componentName;
         this.user = user;
+        new Throwable().printStackTrace();
+        Log.d("rongqingyu","ComponentKey("+componentName+","+user+")");
         mHashCode = Arrays.hashCode(new Object[] {componentName, user});
+
 
     }
 
@@ -45,6 +50,7 @@ public class ComponentKey {
      * to the current user.
      */
     public ComponentKey(Context context, String componentKeyStr) {
+        Log.d("rongqingyu","ComponentKey("+context+","+componentKeyStr+")");
         int userDelimiterIndex = componentKeyStr.indexOf("#");
         if (userDelimiterIndex != -1) {
             String componentStr = componentKeyStr.substring(0, userDelimiterIndex);
@@ -58,6 +64,7 @@ public class ComponentKey {
             user = UserHandleCompat.myUserHandle();
         }
         mHashCode = Arrays.hashCode(new Object[] {componentName, user});
+
     }
 
     /**

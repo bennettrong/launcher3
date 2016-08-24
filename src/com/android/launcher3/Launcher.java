@@ -404,6 +404,7 @@ public class Launcher extends Activity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        new File("").hashCode();
         if (DEBUG_STRICT_MODE) {
             StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
                     .detectDiskReads()
@@ -3428,6 +3429,7 @@ public class Launcher extends Activity
     }
 
     public void enterSpringLoadedDragMode() {
+        Log.d("SpringLoadedDrag","eeeeeeeeeeeeeeeeeeeeee");
         if (LOGD) Log.d(TAG, String.format("enterSpringLoadedDragMode [mState=%s", mState.name()));
         if (mState == State.WORKSPACE || mState == State.APPS_SPRING_LOADED ||
                 mState == State.WIDGETS_SPRING_LOADED) {

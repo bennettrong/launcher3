@@ -28,6 +28,7 @@ import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -218,10 +219,15 @@ public class DragLayer extends InsettableFrameLayout {
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
+
+        new Throwable().printStackTrace();
         int action = ev.getAction();
+
+        Log.d("ccc","onInterceptTouchEvent:"+action+"--->>>");
 
         if (action == MotionEvent.ACTION_DOWN) {
             if (handleTouchDown(ev, true)) {
+                Log.d("ccc","onInterceptTouchEvent:"+action+" result="+true+"<<<<");
                 return true;
             }
         } else if (action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_CANCEL) {
@@ -231,7 +237,9 @@ public class DragLayer extends InsettableFrameLayout {
             mTouchCompleteListener = null;
         }
         clearAllResizeFrames();
-        return mDragController.onInterceptTouchEvent(ev);
+        boolean result =  mDragController.onInterceptTouchEvent(ev);
+        Log.d("ccc","onInterceptTouchEvent:"+action+ " result="+result+"<<<<");
+        return result;
     }
 
     @Override
@@ -344,11 +352,13 @@ public class DragLayer extends InsettableFrameLayout {
         int y = (int) ev.getY();
 
         if (mBlockTouches) {
+            Log.d("ccc","onTouchEvent(action,time)=("+ev.getAction()+","+ev.getEventTime()+") result="+true);
             return true;
         }
 
         if (action == MotionEvent.ACTION_DOWN) {
             if (handleTouchDown(ev, false)) {
+                Log.d("ccc","onTouchEvent(action,time)=("+ev.getAction()+","+ev.getEventTime()+") result="+true);
                 return true;
             }
         } else if (action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_CANCEL) {
@@ -371,8 +381,14 @@ public class DragLayer extends InsettableFrameLayout {
                     mCurrentResizeFrame = null;
             }
         }
-        if (handled) return true;
-        return mDragController.onTouchEvent(ev);
+        if (handled) {
+            Log.d("ccc","onTouchEvent(action,time)=("+ev.getAction()+","+ev.getEventTime()+") result="+true);
+            return true;
+        }
+        boolean result=false;
+        result=mDragController.onTouchEvent(ev);
+        Log.d("ccc","onTouchEvent(action,time)=("+ev.getAction()+","+ev.getEventTime()+") result="+result);
+        return  result;
     }
 
     /**

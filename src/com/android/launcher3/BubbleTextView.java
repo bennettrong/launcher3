@@ -25,11 +25,16 @@ import android.content.res.Resources.Theme;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.PixelFormat;
 import android.graphics.Region;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.os.Environment;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.SparseArray;
 import android.util.TypedValue;
 import android.view.KeyEvent;
@@ -43,6 +48,11 @@ import android.widget.TextView;
 
 import com.android.launcher3.IconCache.IconLoadRequest;
 import com.android.launcher3.model.PackageItemInfo;
+
+import java.io.BufferedOutputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 /**
  * TextView that draws a bubble behind the text. We cannot use a LineBackgroundSpan
@@ -171,7 +181,7 @@ public class BubbleTextView extends TextView
 
         FastBitmapDrawable iconDrawable = mLauncher.createIconDrawable(b);
         iconDrawable.setGhostModeEnabled(info.isDisabled != 0);
-
+        Log.d("seticon","applyFromShortcutInfo:"+info);
         setIcon(iconDrawable, mIconSize);
         if (info.contentDescription != null) {
             setContentDescription(info.contentDescription);
@@ -185,6 +195,7 @@ public class BubbleTextView extends TextView
     }
 
     public void applyFromApplicationInfo(AppInfo info) {
+        Log.d("seticon","applyFromApplicationInfo:"+info);
         setIcon(mLauncher.createIconDrawable(info.iconBitmap), mIconSize);
         setText(info.title);
         if (info.contentDescription != null) {
@@ -198,6 +209,7 @@ public class BubbleTextView extends TextView
     }
 
     public void applyFromPackageItemInfo(PackageItemInfo info) {
+        Log.d("seticon","applyFromApplicationInfo:"+info);
         setIcon(mLauncher.createIconDrawable(info.iconBitmap), mIconSize);
         setText(info.title);
         if (info.contentDescription != null) {
@@ -462,6 +474,7 @@ public class BubbleTextView extends TextView
     }
 
     public void applyState(boolean promiseStateChanged) {
+        Log.d("seticon","applyState");
         if (getTag() instanceof ShortcutInfo) {
             ShortcutInfo info = (ShortcutInfo) getTag();
             final boolean isPromise = info.isPromise();
@@ -505,6 +518,7 @@ public class BubbleTextView extends TextView
      */
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     private Drawable setIcon(Drawable icon, int iconSize) {
+        Log.d("seticon", "---------------------------");
         mIcon = icon;
         if (iconSize != -1) {
             mIcon.setBounds(0, 0, iconSize, iconSize);
@@ -518,7 +532,66 @@ public class BubbleTextView extends TextView
         } else {
             setCompoundDrawables(null, mIcon, null, null);
         }
-        return icon;
+
+        return newIcon(icon, Color.BLUE);
+    }
+
+
+    public Drawable newIcon(Drawable foregroundDrawable,int backgroundResourceId) {
+
+        Log.d("seticon", "11111111111111111111");
+
+
+        Bitmap foregroundBitmap = Bitmap.createBitmap(foregroundDrawable.getIntrinsicWidth(),
+
+                foregroundDrawable.getIntrinsicHeight(),
+
+                foregroundDrawable.getOpacity() != PixelFormat.OPAQUE ? Bitmap.Config.ARGB_8888
+
+                        : Bitmap.Config.RGB_565);
+        int [] color = new int[58*58];
+        for(int i = 0 ;i<color.length;i++)
+        {
+            color[i]=0xffff0000;
+        }
+
+        Bitmap backgroundBitmap =  Bitmap.createBitmap(color,58,58,Bitmap.Config.ARGB_8888);
+
+
+
+        Log.d("seticon", "foregroundDrawable.getIntrinsicWidth():"+foregroundDrawable.getIntrinsicWidth());
+        Log.d("seticon", "foregroundDrawable.getIntrinsicHeight():" + foregroundDrawable.getIntrinsicHeight());
+
+        int fgWidth = foregroundBitmap.getWidth();
+        int fgHeight = foregroundBitmap.getHeight();
+
+        foregroundDrawable.draw(new Canvas(foregroundBitmap));
+
+        Log.d("seticon","  foregroundBitmap Width x Height= "+ fgWidth+"    X   "+fgHeight );
+        Log.d("seticon", "backgroundBitmap Width x Height=" + backgroundBitmap.getWidth() + " X " + backgroundBitmap.getHeight());
+
+        Bitmap newbmp = Bitmap.createBitmap(fgWidth, fgHeight, Bitmap.Config.ARGB_8888);
+        Canvas cv = new Canvas(newbmp);
+        try {
+            BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(Environment.getExternalStorageDirectory().getPath()+"/test.png"));
+            backgroundBitmap.compress(Bitmap.CompressFormat.PNG, 100,bos);
+            bos.flush();
+            bos.close();
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+        cv.drawBitmap(foregroundBitmap, 0, 0, null);
+        cv.drawBitmap(backgroundBitmap, 0, 0, null);
+
+
+        BitmapDrawable bmd = new BitmapDrawable(newbmp);
+        return bmd;
+
     }
 
     @Override

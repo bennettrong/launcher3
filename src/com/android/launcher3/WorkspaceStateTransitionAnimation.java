@@ -24,6 +24,7 @@ import android.animation.TimeInterpolator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.Resources;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.accessibility.AccessibilityManager;
@@ -291,8 +292,10 @@ public class WorkspaceStateTransitionAnimation {
 
         if (states.oldStateIsOverview) {
             mWorkspace.disableFreeScroll();
+            Log.d("FreeScroll","1111111111111111111111");
         } else if (states.stateIsOverview) {
             mWorkspace.enableFreeScroll();
+            Log.d("FreeScroll", "2222222222222222222222");
         }
 
         if (!states.stateIsNormal) {

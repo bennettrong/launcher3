@@ -31,7 +31,7 @@ public abstract class AbstractUserComparator<T extends ItemInfo> implements Comp
     private final UserManagerCompat mUserManager;
     private final UserHandleCompat mMyUser;
 
-    public AbstractUserComparator(Context context) {
+    public      AbstractUserComparator(Context context) {
         mUserManager = UserManagerCompat.getInstance(context);
         mMyUser = UserHandleCompat.myUserHandle();
     }

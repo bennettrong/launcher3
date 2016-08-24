@@ -352,9 +352,9 @@ public class AllAppsContainerView extends BaseContainerView implements DragSourc
                     new SimpleSectionMergeAlgorithm((int) Math.ceil(mNumAppsPerRow / 2f),
                             MIN_ROWS_IN_MERGED_SECTION_PHONE, MAX_NUM_MERGES_PHONE);
 
-            mAppsRecyclerView.setNumAppsPerRow(grid, mNumAppsPerRow);
+            mAppsRecyclerView.setNumAppsPerRow(grid, mNumAppsPerRow);//mNumAppsPerRow==4
             mAdapter.setNumAppsPerRow(mNumAppsPerRow);
-            mApps.setNumAppsPerRow(mNumAppsPerRow, mNumPredictedAppsPerRow, mergeAlgorithm);
+            mApps.setNumAppsPerRow(mNumAppsPerRow, mNumPredictedAppsPerRow, mergeAlgorithm);//mNumPredictedAppsPerRow ==4
         }
 
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
@@ -459,6 +459,9 @@ public class AllAppsContainerView extends BaseContainerView implements DragSourc
 
     @Override
     public boolean onLongClick(View v) {
+
+        new Throwable().printStackTrace();
+        Log.d("ccc","onLongClick");
         // Return early if this is not initiated from a touch
         if (!v.isInTouchMode()) return false;
         // When we have exited all apps or are in transition, disregard long clicks

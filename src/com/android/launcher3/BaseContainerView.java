@@ -125,6 +125,7 @@ public abstract class BaseContainerView extends LinearLayout implements Insettab
                     getMeasuredWidth() - padding.right,
                     getMeasuredHeight() - padding.bottom);
             mSearchBarBounds.set(searchBarBounds);
+            Log.d("rongqingyu","mContentPadding:"+mContentPadding+" mContentBounds:"+mContentBounds+" mSearchBarBounds:"+mSearchBarBounds);
             onUpdateBackgroundAndPaddings(mSearchBarBounds, padding);
         }
     }

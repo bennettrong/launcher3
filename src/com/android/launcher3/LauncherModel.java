@@ -2781,6 +2781,7 @@ public class LauncherModel extends BroadcastReceiver
         }
 
         private void loadAllApps() {
+            Log.d("rongqingyu","loadAllApps");
             final long loadTime = DEBUG_LOADERS ? SystemClock.uptimeMillis() : 0;
 
             final Callbacks oldCallbacks = mCallbacks.get();
@@ -2813,7 +2814,16 @@ public class LauncherModel extends BroadcastReceiver
                 for (int i = 0; i < apps.size(); i++) {
                     LauncherActivityInfoCompat app = apps.get(i);
                     // This builds the icon bitmaps.
-                    mBgAllAppsList.add(new AppInfo(mContext, app, user, mIconCache));
+                    AppInfo appinfo = new AppInfo(mContext, app, user, mIconCache);
+                    mBgAllAppsList.add(appinfo);
+                    Intent intent = new Intent("com.android.launcher.action.INSTALL_SHORTCUT");
+                    intent.putExtra(Intent.EXTRA_SHORTCUT_NAME,appinfo.title);
+                    // 是否可以有多个快捷方式的副本，参数如果是true就可以生成多个快捷方式，如果是false就不会重复添加
+                    intent.putExtra("duplicate", false);
+
+                    intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, appinfo.intent);
+                    ((Launcher)getCallback()).sendBroadcast(intent);
+
                 }
 
                 final ManagedProfileHeuristic heuristic = ManagedProfileHeuristic.get(mContext, user);

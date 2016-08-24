@@ -92,6 +92,7 @@ public class AllAppsBackgroundDrawable extends Drawable {
     private ObjectAnimator mBackgroundAnim;
 
     public AllAppsBackgroundDrawable(Context context) {
+
         Resources res = context.getResources();
         mHand = new TransformedImageDrawable(res, R.drawable.ic_all_apps_bg_hand,
                 0.575f, 0.1f, Gravity.CENTER_HORIZONTAL);

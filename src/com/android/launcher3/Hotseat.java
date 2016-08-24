@@ -110,7 +110,7 @@ public class Hotseat extends FrameLayout
         mContent.removeAllViewsInLayout();
 
         // Add the Apps button
-        Context context = getContext();
+        /*Context context = getContext();
 
         LayoutInflater inflater = LayoutInflater.from(context);
         TextView allAppsButton = (TextView)
@@ -130,6 +130,7 @@ public class Hotseat extends FrameLayout
             allAppsButton.setOnFocusChangeListener(mLauncher.mFocusHandler);
         }
 
+
         // Note: We do this to ensure that the hotseat is always laid out in the orientation of
         // the hotseat in order regardless of which orientation they were added
         int x = getCellXFromOrder(mAllAppsButtonRank);
@@ -137,6 +138,7 @@ public class Hotseat extends FrameLayout
         CellLayout.LayoutParams lp = new CellLayout.LayoutParams(x,y,1,1);
         lp.canReorder = false;
         mContent.addViewToCellLayout(allAppsButton, -1, allAppsButton.getId(), lp, true);
+        */
     }
 
     @Override

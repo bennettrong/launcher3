@@ -165,7 +165,7 @@ public class LauncherScroller  {
      * @param friction A scalar dimension-less value representing the coefficient of
      *         friction.
      */
-    public final void setFriction(float friction) {
+    public final void setFriction(float friction) {//friction 摩擦力
         mDeceleration = computeDeceleration(friction);
         mFlingFriction = friction;
     }

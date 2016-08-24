@@ -21,6 +21,7 @@ import android.content.Context;
 import android.graphics.Point;
 import android.os.Build;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
 
@@ -101,9 +102,9 @@ public class InvariantDeviceProfile {
     InvariantDeviceProfile(String n, float w, float h, int r, int c, int fr, int fc, int maapc,
             float is, float its, float hs, float his, int dlId) {
         // Ensure that we have an odd number of hotseat items (since we need to place all apps)
-        if (hs % 2 == 0) {
+       /* if (hs % 2 == 0) {
             throw new RuntimeException("All Device Profiles must have an odd number of hotseat spaces");
-        }
+        }*/
 
         name = n;
         minWidthDps = w;
@@ -122,6 +123,8 @@ public class InvariantDeviceProfile {
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     InvariantDeviceProfile(Context context) {
+        Log.d("rongqingyu","InvariantDeviceProfile(Context context)");
+        new Throwable().printStackTrace();
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
         DisplayMetrics dm = new DisplayMetrics();
@@ -141,6 +144,7 @@ public class InvariantDeviceProfile {
                 invDistWeightedInterpolate(minWidthDps,  minHeightDps, closestProfiles);
 
         InvariantDeviceProfile closestProfile = closestProfiles.get(0);
+        Log.d("rank","closestProfile:"+closestProfile.name);
         numRows = closestProfile.numRows;
         numColumns = closestProfile.numColumns;
         numHotseatIcons = closestProfile.numHotseatIcons;
@@ -188,9 +192,9 @@ public class InvariantDeviceProfile {
         predefinedDeviceProfiles.add(new InvariantDeviceProfile("Nexus S",
                 296, 491.33f, 4, 4, 4, 4, 4, 48, 13, 5, 48, R.xml.default_workspace_4x4));
         predefinedDeviceProfiles.add(new InvariantDeviceProfile("Nexus 4",
-                335, 567,     4, 4, 4, 4, 4, DEFAULT_ICON_SIZE_DP, 13, 5, 56, R.xml.default_workspace_4x4));
+                335, 567,     4, 4, 4, 4, 4, DEFAULT_ICON_SIZE_DP, 13, 4, DEFAULT_ICON_SIZE_DP, R.xml.default_workspace_4x4));
         predefinedDeviceProfiles.add(new InvariantDeviceProfile("Nexus 5",
-                359, 567,     4, 4, 4, 4, 4, DEFAULT_ICON_SIZE_DP, 13, 5, 56, R.xml.default_workspace_4x4));
+                359, 567,     4, 4, 4, 4, 4, DEFAULT_ICON_SIZE_DP, 13, 4, DEFAULT_ICON_SIZE_DP, R.xml.default_workspace_4x4));
         predefinedDeviceProfiles.add(new InvariantDeviceProfile("Large Phone",
                 406, 694,     5, 5, 4, 4, 4, 64, 14.4f,  5, 56, R.xml.default_workspace_5x5));
         // The tablet profile is odd in that the landscape orientation
