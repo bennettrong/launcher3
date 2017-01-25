@@ -30,6 +30,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Looper;
 import android.os.Parcelable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -152,6 +153,8 @@ public class FolderIcon extends FrameLayout implements FolderListener {
 
         DeviceProfile grid = launcher.getDeviceProfile();
 
+
+
         FolderIcon icon = (FolderIcon) LayoutInflater.from(launcher).inflate(resId, group, false);
         icon.setClipToPadding(false);
         icon.mFolderName = (BubbleTextView) icon.findViewById(R.id.folder_icon_name);
@@ -159,13 +162,15 @@ public class FolderIcon extends FrameLayout implements FolderListener {
         icon.mFolderName.setCompoundDrawablePadding(0);
         FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) icon.mFolderName.getLayoutParams();
         lp.topMargin = grid.iconSizePx + grid.iconDrawablePaddingPx;
+        Log.d("FolderIcon","grid.iconSizePx:"+grid.iconSizePx+"grid.iconDrawablePaddingPx:"+grid.iconDrawablePaddingPx);
 
         // Offset the preview background to center this view accordingly
         icon.mPreviewBackground = (ImageView) icon.findViewById(R.id.preview_background);
         lp = (FrameLayout.LayoutParams) icon.mPreviewBackground.getLayoutParams();
-        lp.topMargin = grid.folderBackgroundOffset;
-        lp.width = grid.folderIconSizePx;
-        lp.height = grid.folderIconSizePx;
+        //lp.topMargin = grid.folderBackgroundOffset;
+        lp.width =  grid.iconSizePx ;//grid.folderIconSizePx;
+        lp.height =  grid.iconSizePx ;//grid.folderIconSizePx;
+        Log.d("FolderIcon","lp.height:"+lp.height + "lp.width :"+lp.width );
 
         icon.setTag(folderInfo);
         icon.setOnClickListener(launcher);

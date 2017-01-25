@@ -21,29 +21,6 @@
     android:background="@drawable/quantum_panel"
     android:elevation="5dp"
     android:orientation="vertical" >
-
-    <FrameLayout
-        android:id="@+id/folder_content_wrapper"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" >
-
-        <!-- Actual size of the indicator doesn't matter as it is scaled to match the view size -->
-
-        <com.android.zlauncher.FocusIndicatorView
-            android:id="@+id/focus_indicator"
-            android:layout_width="20dp"
-            android:layout_height="20dp" />
-
-        <com.android.zlauncher.FolderPagedView
-            android:id="@+id/folder_content"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingLeft="4dp"
-            android:paddingRight="4dp"
-            android:paddingTop="8dp"
-            launcher:pageIndicator="@+id/folder_page_indicator" />
-    </FrameLayout>
-
     <LinearLayout
         android:id="@+id/folder_footer"
         android:layout_width="match_parent"
@@ -80,5 +57,29 @@
             layout="@layout/page_indicator" />
 
     </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/folder_content_wrapper"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <!-- Actual size of the indicator doesn't matter as it is scaled to match the view size -->
+
+        <com.android.zlauncher.FocusIndicatorView
+            android:id="@+id/focus_indicator"
+            android:layout_width="20dp"
+            android:layout_height="20dp" />
+
+        <com.android.zlauncher.FolderPagedView
+            android:id="@+id/folder_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
+            android:paddingTop="8dp"
+            launcher:pageIndicator="@+id/folder_page_indicator" />
+    </FrameLayout>
+
+ 
 
 </com.android.zlauncher.Folder>

@@ -28,6 +28,10 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PixelFormat;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.graphics.Region;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -50,9 +54,11 @@ import com.android.zlauncher.IconCache.IconLoadRequest;
 import com.android.zlauncher.model.PackageItemInfo;
 
 import java.io.BufferedOutputStream;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Random;
 
 /**
  * TextView that draws a bubble behind the text. We cannot use a LineBackgroundSpan
@@ -142,6 +148,7 @@ public class BubbleTextView extends TextView
 
         mIconSize = a.getDimensionPixelSize(R.styleable.BubbleTextView_iconSizeOverride,
                 defaultIconSize);
+        Log.d("FolderIcon","mIconSize:"+mIconSize);
 
         a.recycle();
 
@@ -519,7 +526,7 @@ public class BubbleTextView extends TextView
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     private Drawable setIcon(Drawable icon, int iconSize) {
         Log.d("seticon", "---------------------------");
-        mIcon = icon;
+        mIcon = newIcon(icon);
         if (iconSize != -1) {
             mIcon.setBounds(0, 0, iconSize, iconSize);
         }
@@ -532,66 +539,68 @@ public class BubbleTextView extends TextView
         } else {
             setCompoundDrawables(null, mIcon, null, null);
         }
-
-        return newIcon(icon, Color.BLUE);
+        return mIcon;
     }
 
-
-    public Drawable newIcon(Drawable foregroundDrawable,int backgroundResourceId) {
-
-        Log.d("seticon", "11111111111111111111");
-
-
+    public Drawable newIcon(Drawable foregroundDrawable) {
+        Log.d("seticon","new Icon");
         Bitmap foregroundBitmap = Bitmap.createBitmap(foregroundDrawable.getIntrinsicWidth(),
-
                 foregroundDrawable.getIntrinsicHeight(),
-
                 foregroundDrawable.getOpacity() != PixelFormat.OPAQUE ? Bitmap.Config.ARGB_8888
-
                         : Bitmap.Config.RGB_565);
-        int [] color = new int[58*58];
-        for(int i = 0 ;i<color.length;i++)
-        {
-            color[i]=0xffff0000;
-        }
+        int fgWidth = foregroundBitmap.getWidth(); int fgHeight = foregroundBitmap.getHeight();
+        int roundPxy= (int) (0.22* Math.max(fgWidth,fgHeight));
+        final Rect rect = new Rect(0, 0, fgWidth, fgHeight);
+        final RectF rectF = new RectF(rect);
 
-        Bitmap backgroundBitmap =  Bitmap.createBitmap(color,58,58,Bitmap.Config.ARGB_8888);
+        Canvas drawableCanvas = new Canvas(foregroundBitmap);
+        foregroundDrawable.draw(drawableCanvas);   //                   c1 drawableCanvas ---------->  b1 foregroundBitmap
+        final Paint paint = new Paint();
+        paint.setAntiAlias(true);
+        paint.setColor(0xEECCCCCC);
+        //图片小的加白色圆角背景
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_ATOP));
+        drawableCanvas.drawRoundRect(rectF, roundPxy, roundPxy, paint);
+        // 加白色圆角矩形背景但是圆图角比较突出，要抹去棱角怎么实现呢？
+        Bitmap whiteCorner =  Bitmap.createBitmap(fgWidth, fgHeight, Bitmap.Config.ARGB_8888);
+        Canvas  c1 = new Canvas(whiteCorner);
+        c1.drawColor(0XFFFFFFFF);
+        paint.setColor(0xffff0000);
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_OUT));
+        c1.drawRoundRect(rectF, roundPxy, roundPxy, paint);
+
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_OUT));
+        drawableCanvas.drawBitmap(whiteCorner,0,0,paint);
 
 
-
-        Log.d("seticon", "foregroundDrawable.getIntrinsicWidth():"+foregroundDrawable.getIntrinsicWidth());
-        Log.d("seticon", "foregroundDrawable.getIntrinsicHeight():" + foregroundDrawable.getIntrinsicHeight());
-
-        int fgWidth = foregroundBitmap.getWidth();
-        int fgHeight = foregroundBitmap.getHeight();
-
-        foregroundDrawable.draw(new Canvas(foregroundBitmap));
-
-        Log.d("seticon","  foregroundBitmap Width x Height= "+ fgWidth+"    X   "+fgHeight );
-        Log.d("seticon", "backgroundBitmap Width x Height=" + backgroundBitmap.getWidth() + " X " + backgroundBitmap.getHeight());
-
-        Bitmap newbmp = Bitmap.createBitmap(fgWidth, fgHeight, Bitmap.Config.ARGB_8888);
-        Canvas cv = new Canvas(newbmp);
+        File file= new File(Environment.getExternalStorageDirectory(),"test"+new Random().nextInt(300)+".png");
         try {
-            BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(Environment.getExternalStorageDirectory().getPath()+"/test.png"));
-            backgroundBitmap.compress(Bitmap.CompressFormat.PNG, 100,bos);
-            bos.flush();
-            bos.close();
+            FileOutputStream fos = new FileOutputStream(file);
+            foregroundBitmap.compress(Bitmap.CompressFormat.PNG,100,fos);
+            fos.flush();
+            fos.close();
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
+ /* Icon 缓存，优化性能
+        File file= new File(Environment.getExternalStorageDirectory(),"test"+new Random().nextInt(0x0fffffff)+".png");
+        try {
+            FileOutputStream fos = new FileOutputStream(file);
+            newbmp.compress(Bitmap.CompressFormat.PNG,100,fos);
+            fos.flush();
+            fos.close();
 
-
-        cv.drawBitmap(foregroundBitmap, 0, 0, null);
-        cv.drawBitmap(backgroundBitmap, 0, 0, null);
-
-
-        BitmapDrawable bmd = new BitmapDrawable(newbmp);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+   */
+        BitmapDrawable bmd= new BitmapDrawable(foregroundBitmap);
         return bmd;
-
     }
 
     @Override
